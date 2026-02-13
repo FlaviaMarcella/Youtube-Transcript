@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Project specific
+temp_*/
+*.mp3
+*.vtt
+output/
+downloads/
+
+# Assets (except placeholders)
+assets/*.png
+!assets/logo.png
+!assets/banner.png
+
+# OS
+.DS_Store
+Thumbs.db
