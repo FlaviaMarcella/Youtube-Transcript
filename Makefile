@@ -15,17 +15,15 @@ run:
 
 build:
 	pip install --upgrade pyinstaller
-	python src/main.py &
-	sleep 3 || true
 	pyinstaller YouTubeTranscriberPro.spec
 	@echo "Build concluído! Executável em: dist/YouTubeTranscriberPro/"
 
 clean:
-	rm -rf src/__pycache__
-	rm -rf __pycache__
-	rm -rf build
-	rm -rf dist
-	rm -rf YouTubeTranscriberPro
-	rm -f temp_*
-	rm -f *.mp3
-	rm -f *.vtt
+	powershell -Command "Remove-Item -Path 'src/__pycache__' -Recurse -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path '__pycache__' -Recurse -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path 'build' -Recurse -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path 'dist' -Recurse -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path 'YouTubeTranscriberPro' -Recurse -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path 'temp_*' -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path '*.mp3' -Force -ErrorAction SilentlyContinue"
+	powershell -Command "Remove-Item -Path '*.vtt' -Force -ErrorAction SilentlyContinue"
