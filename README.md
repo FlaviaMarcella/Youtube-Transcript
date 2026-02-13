@@ -30,10 +30,34 @@ Para iniciar a aplicação com interface gráfica:
 make run
 ```
 
+## 🏗️ Compilar Executável
+
+Para criar um executável autossuficiente (.exe no Windows):
+```bash
+make build
+```
+
+O arquivo executável será gerado em `dist/YouTubeTranscriberPro/`.
+
+**Nota Windows**: Se o comando `make` não for reconhecido, instale GNU Make:
+```bash
+choco install make
+```
+
 ## ⚙️ Requisitos
 
 - Python 3.8+
-- FFmpeg
+- FFmpeg (instalado automaticamente na primeira execução)
 - yt-dlp
 - openai-whisper
 - customtkinter
+
+## 📋 Todos os Comandos Disponíveis
+
+```bash
+make help      # Mostra todos os comandos
+make install   # Instala as dependências
+make run       # Executa a aplicação
+make build     # Cria o executável (.exe)
+make clean     # Remove arquivos temporários de build
+```

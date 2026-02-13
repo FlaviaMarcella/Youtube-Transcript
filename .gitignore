@@ -12,6 +12,8 @@ temp_*/
 *.vtt
 output/
 downloads/
+*build
+*dist
 
 # Assets (except placeholders)
 assets/*.png
