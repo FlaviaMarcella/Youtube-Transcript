@@ -241,6 +241,18 @@ class TranscriberApp(ctk.CTk):
         )
         self.fetch_button.pack(side="left", padx=10, fill="x", expand=True)
 
+        self.cancel_op_button = ctk.CTkButton(
+            buttons_frame, 
+            text="🛑 Cancelar Operação", 
+            command=self.cancel_operation, 
+            font=ctk.CTkFont(size=14, weight="bold"),
+            height=45,
+            fg_color="gray30",
+            hover_color="gray25",
+            state="disabled"
+        )
+        self.cancel_op_button.pack(side="left", padx=10, fill="x", expand=True)
+
         # Barra de Progresso
         self.progress_bar = ctk.CTkProgressBar(self, fg_color=primary_color)
         self.progress_bar.grid(row=6, column=0, padx=20, pady=(0, 10), sticky="ew")
@@ -431,7 +443,9 @@ class TranscriberApp(ctk.CTk):
             messagebox.showwarning("Aviso", "Selecione uma pasta de saída.")
             return
         
+        self.core.reset_cancel()
         self.fetch_button.configure(state="disabled")
+        self.cancel_op_button.configure(state="normal", fg_color="#CC0000")
         self.progress_bar.configure(mode="indeterminate")
         self.progress_bar.start()
         
@@ -440,6 +454,12 @@ class TranscriberApp(ctk.CTk):
         thread = threading.Thread(target=self.run_core, args=(url, output_folder, selected_indices, workers))
         thread.daemon = True
         thread.start()
+
+    def cancel_operation(self):
+        """Cancela a operação em curso"""
+        if messagebox.askyesno("Confirmar", "Deseja realmente cancelar a operação?"):
+            self.core.cancel()
+            self.cancel_op_button.configure(state="disabled", fg_color="gray30")
 
     def run_core(self, url, output_folder, selected_indices, workers):
         try:
@@ -458,6 +478,7 @@ class TranscriberApp(ctk.CTk):
 
     def reset_ui(self):
         self.fetch_button.configure(state="normal")
+        self.cancel_op_button.configure(state="disabled", fg_color="gray30")
         self.progress_bar.stop()
         self.progress_bar.set(0)
 

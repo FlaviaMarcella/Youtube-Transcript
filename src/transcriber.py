@@ -13,11 +13,19 @@ class TranscriberCore:
         self.logger = logger_callback
         self.has_ffmpeg = shutil.which("ffmpeg") is not None
         self.has_whisper = False
+        self._is_cancelled = False
         try:
             import whisper
             self.has_whisper = True
         except ImportError:
             pass
+
+    def cancel(self):
+        self._is_cancelled = True
+        self.log("⚠️ Operação cancelada pelo usuário.")
+
+    def reset_cancel(self):
+        self._is_cancelled = False
 
     def log(self, message):
         if self.logger:
@@ -77,6 +85,8 @@ class TranscriberCore:
             return f"[Erro IA: {str(e)}]"
 
     def process_single_video(self, video_data, folder, index, total):
+        if self._is_cancelled:
+            return False
         title = video_data.get('title', 'SemTitulo')
         vid_id = video_data.get('id')
         video_url = f"https://www.youtube.com/watch?v={vid_id}"
@@ -171,6 +181,9 @@ class TranscriberCore:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [executor.submit(self.process_single_video, vid, output_folder, i, total) for i, vid in enumerate(selected_videos)]
             for future in futures:
+                if self._is_cancelled:
+                    executor.shutdown(wait=False, cancel_futures=True)
+                    break
                 if future.result():
                     success_count += 1
 
